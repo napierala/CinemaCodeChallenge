@@ -8,6 +8,8 @@
 - Dates: Normally zoned dates are used, as the server could be in one country and the application logic in a different timezone, but for the sake of this challenge LocalDateTime were used.
 - Logs: Normally a log system like graylog is used but for the sake of this challenge a default console log from spring was used.
 - Security: Usually oauth tokens with https are used as authentication but for the sake of this challenge a simple basic authentication was used which of course needs https. Many times https is done via other mechanism like haproxy to keep things simple and avoid the self-signed certificate problems https was omitted.
+- Currency: Only one currency is assumed in this app.
+- Cinema: Even though the requirements only state a single cinema, supporting from the beginning many cinemas will mean a lot less changes when the client opens more cinemas.
 
 ## Prerequisites:
 - maven installed.
@@ -17,6 +19,10 @@
 ## Build:
 
 mvn clean package
+
+## Run integration tests:
+
+mvn clean test -P IT
 
 ## Launch:
 
