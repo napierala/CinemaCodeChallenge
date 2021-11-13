@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Data
@@ -18,18 +17,12 @@ import java.io.Serializable;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Schema(description = "The user register request.")
-public class UserRegisterRequest implements Serializable {
+@Schema(description = "The request for the movie details.")
+public class MovieDetailsRequest implements Serializable {
 
-    private static final long serialVersionUID = 6683768280436650801L;
-
-    @NotEmpty
-    @Size(min = 3)
-    @Schema(description = "The username.")
-    private String userName;
+    private static final long serialVersionUID = -7996813454445560299L;
 
     @NotEmpty
-    @Size(min = 5)
-    @Schema(description = "The password, should be in plaintext - not encoded in any way.")
-    private String password;
+    @Schema(description = "The movie code.")
+    private String movieCode;
 }

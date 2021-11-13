@@ -3,6 +3,7 @@ package pl.napierala.cinemacodechallenge.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -33,6 +34,10 @@ public class MovieShowingEntity {
     @JoinColumn(name = "movie_id", foreignKey = @ForeignKey(name = "movie_showing_movie_id_fkey"))
     private MovieEntity movie;
 
+    @NotEmpty
+    @Column(name = "uuid", nullable = false)
+    private String uuid;
+
     @NotNull
     @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
@@ -51,6 +56,7 @@ public class MovieShowingEntity {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (cinema != null ? !cinema.equals(that.cinema) : that.cinema != null) return false;
         if (movie != null ? !movie.equals(that.movie) : that.movie != null) return false;
+        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
         if (dateTime != null ? !dateTime.equals(that.dateTime) : that.dateTime != null) return false;
         return room != null ? room.equals(that.room) : that.room == null;
     }
@@ -60,6 +66,7 @@ public class MovieShowingEntity {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (cinema != null ? cinema.hashCode() : 0);
         result = 31 * result + (movie != null ? movie.hashCode() : 0);
+        result = 31 * result + (uuid != null ? uuid.hashCode() : 0);
         result = 31 * result + (dateTime != null ? dateTime.hashCode() : 0);
         result = 31 * result + (room != null ? room.hashCode() : 0);
         return result;
@@ -71,6 +78,7 @@ public class MovieShowingEntity {
                 "id=" + id +
                 ", cinema=" + cinema +
                 ", movie=" + movie +
+                ", uuid='" + uuid + '\'' +
                 ", dateTime=" + dateTime +
                 ", room='" + room + '\'' +
                 '}';

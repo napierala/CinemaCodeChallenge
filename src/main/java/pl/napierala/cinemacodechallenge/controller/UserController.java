@@ -30,7 +30,7 @@ public class UserController {
 
     @Operation(
             summary = "Register a user.",
-            description = "Registers a user if the userName is not already used.",
+            description = "Registers a user if the userName is not already used. Available without authentication.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Result",
                             content = @Content(mediaType = "application/json",
@@ -46,7 +46,7 @@ public class UserController {
 
     @Operation(
             summary = "Login a user.",
-            description = "Checks if the credentials given are correct.",
+            description = "Checks if the credentials given are correct. Available without authentication.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Result",
                             content = @Content(mediaType = "application/json",

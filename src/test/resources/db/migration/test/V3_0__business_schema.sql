@@ -30,6 +30,7 @@ CREATE TABLE movie_showing (
   id IDENTITY NOT NULL,
   cinema_id BIGINT,
   movie_id BIGINT,
+  uuid VARCHAR(255) NOT NULL,
   date_time TIMESTAMP NOT NULL,
   room VARCHAR(255) NOT NULL,
   CONSTRAINT movie_showing_primary_key PRIMARY KEY (id),

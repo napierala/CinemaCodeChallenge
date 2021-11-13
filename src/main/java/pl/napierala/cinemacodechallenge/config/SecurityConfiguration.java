@@ -31,6 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
          */
         http.authorizeRequests()
                 .antMatchers("/public/user/login", "/public/user/register").permitAll()
+                .antMatchers("/movieShowing/find").permitAll()
                 .antMatchers("/public/h2-console/*", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
