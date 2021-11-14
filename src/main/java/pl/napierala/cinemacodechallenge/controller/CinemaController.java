@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import pl.napierala.cinemacodechallenge.extmodel.CinemaDetailsRequest;
+import pl.napierala.cinemacodechallenge.extmodel.CinemaDetailsResponse;
 import pl.napierala.cinemacodechallenge.extmodel.UpdateTicketPricesRequest;
 import pl.napierala.cinemacodechallenge.extmodel.UpdateTicketPricesResponse;
-import pl.napierala.cinemacodechallenge.service.TicketPricesService;
+import pl.napierala.cinemacodechallenge.service.CinemaService;
 
 import javax.validation.Valid;
 
@@ -20,11 +22,11 @@ import javax.validation.Valid;
 @RequestMapping("/cinema")
 public class CinemaController {
 
-    private TicketPricesService ticketPricesService;
+    private CinemaService cinemaService;
 
     @Autowired
-    public CinemaController(TicketPricesService ticketPricesService) {
-        this.ticketPricesService = ticketPricesService;
+    public CinemaController(CinemaService cinemaService) {
+        this.cinemaService = cinemaService;
     }
 
     @Operation(
@@ -41,6 +43,22 @@ public class CinemaController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/updateTicketPrices", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public UpdateTicketPricesResponse updateTicketPrices(@RequestBody @Valid final UpdateTicketPricesRequest request) {
-        return ticketPricesService.updateTicketPrices(request);
+        return cinemaService.updateTicketPrices(request);
+    }
+
+    @Operation(
+            summary = "Details about a particular cinema.",
+            description = "Find the details for a particular cinema. Available without authentication.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Result",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = CinemaDetailsResponse.class)
+                            )
+                    )
+            }
+    )
+    @RequestMapping(value = "/details", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    public CinemaDetailsResponse details(@RequestBody @Valid final CinemaDetailsRequest request) {
+        return cinemaService.details(request);
     }
 }

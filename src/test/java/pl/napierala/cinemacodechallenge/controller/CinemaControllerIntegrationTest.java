@@ -7,17 +7,15 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.napierala.cinemacodechallenge.entity.CinemaEntity;
 import pl.napierala.cinemacodechallenge.entity.TicketPriceEntity;
-import pl.napierala.cinemacodechallenge.extmodel.TicketPricesRequest;
-import pl.napierala.cinemacodechallenge.extmodel.UpdateTicketPricesRequest;
-import pl.napierala.cinemacodechallenge.extmodel.UpdateTicketPricesResponse;
+import pl.napierala.cinemacodechallenge.extmodel.*;
 import pl.napierala.cinemacodechallenge.repository.CinemaRepository;
 import pl.napierala.cinemacodechallenge.repository.TicketPriceRepository;
 import pl.napierala.cinemacodechallenge.util.IntegrationTest;
+import pl.napierala.cinemacodechallenge.util.RequestUtil;
 
 import java.util.List;
 
@@ -42,7 +40,7 @@ public class CinemaControllerIntegrationTest {
     public void shouldOverrideWithNewValuesIfThereIsOnlyOnePrice() throws Exception {
 
         // Given
-        String cinemaCode = "TEST_CINEMA";
+        String cinemaCode = "TEST_CINEMA_CCIT_1";
         String cinemaName = "TEST_CINEMA_NAME";
         String cinemaAddress = "TEST ADDRESS";
 
@@ -75,7 +73,7 @@ public class CinemaControllerIntegrationTest {
                 .build();
 
         // When
-        UpdateTicketPricesResponse updateTicketPricesResponse = request("/cinema/updateTicketPrices", HttpMethod.POST, "admin", "admin_password", UpdateTicketPricesResponse.class, request);
+        UpdateTicketPricesResponse updateTicketPricesResponse = RequestUtil.request(restTemplate, "/cinema/updateTicketPrices", HttpMethod.POST, "admin", "admin_password", UpdateTicketPricesResponse.class, request);
 
         //Then
         assertNotNull(updateTicketPricesResponse);
@@ -97,7 +95,7 @@ public class CinemaControllerIntegrationTest {
     public void shouldOverrideWithNewValuesIfThereAreTwoPrices() throws Exception {
 
         // Given
-        String cinemaCode = "TEST_CINEMA_2";
+        String cinemaCode = "TEST_CINEMA_CCIT_2";
         String cinemaName = "TEST_CINEMA_2_NAME";
         String cinemaAddress = "TEST ADDRESS";
 
@@ -138,7 +136,7 @@ public class CinemaControllerIntegrationTest {
                 .build();
 
         // When
-        UpdateTicketPricesResponse updateTicketPricesResponse = request("/cinema/updateTicketPrices", HttpMethod.POST, "admin", "admin_password", UpdateTicketPricesResponse.class, request);
+        UpdateTicketPricesResponse updateTicketPricesResponse = RequestUtil.request(restTemplate, "/cinema/updateTicketPrices", HttpMethod.POST, "admin", "admin_password", UpdateTicketPricesResponse.class, request);
 
         //Then
         assertNotNull(updateTicketPricesResponse);
@@ -156,15 +154,49 @@ public class CinemaControllerIntegrationTest {
         assertEquals(priceInCentsAfterUpdate, ticketPricesAfterUpdate.get(0).getPriceInCents());
     }
 
-    private <T> T request(String url, HttpMethod httpMethod, String user, String password, Class<T> responseClazz, Object request) throws Exception {
+    @Test
+    public void shouldReturnCorrectDetailsForCinema() throws Exception {
 
         // Given
-        TestRestTemplate finalRestTemplate = this.restTemplate;
+        String cinemaCode = "TEST_CINEMA_CCIT_3";
+        String cinemaName = "TEST_CINEMA_NAME";
+        String cinemaAddress = "TEST ADDRESS";
 
-        if (user != null && password != null) {
-            finalRestTemplate = finalRestTemplate.withBasicAuth(user, password);
-        }
+        CinemaEntity cinemaEntity = cinemaRepository.save(
+                CinemaEntity.builder()
+                        .code(cinemaCode)
+                        .name(cinemaName)
+                        .address(cinemaAddress)
+                        .build()
+        );
 
-        return finalRestTemplate.exchange(url, httpMethod, new HttpEntity<>(request), responseClazz).getBody();
+        String description = "DESCRIPTION";
+        Integer priceInCents = 100;
+
+        ticketPriceRepository.save(
+                TicketPriceEntity.builder()
+                        .cinema(cinemaEntity)
+                        .description(description)
+                        .priceInCents(priceInCents)
+                        .build()
+        );
+
+        CinemaDetailsRequest request = CinemaDetailsRequest.builder()
+                .cinemaCode(cinemaCode)
+                .build();
+
+        // When
+        CinemaDetailsResponse result = RequestUtil.request(restTemplate, "/cinema/details", HttpMethod.POST, null, null, CinemaDetailsResponse.class, request);
+
+        //Then
+        assertNotNull(result);
+        assertEquals(cinemaCode, result.getCode());
+        assertEquals(cinemaName, result.getName());
+        assertEquals(cinemaAddress, result.getAddress());
+
+        assertNotNull(result.getTicketPrices());
+        assertEquals(1, result.getTicketPrices().size());
+        assertEquals(description, result.getTicketPrices().get(0).getDescription());
+        assertEquals(priceInCents, result.getTicketPrices().get(0).getPriceInCents());
     }
 }

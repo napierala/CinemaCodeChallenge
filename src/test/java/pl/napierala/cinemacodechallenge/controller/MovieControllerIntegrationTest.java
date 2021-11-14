@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.napierala.cinemacodechallenge.entity.MovieEntity;
@@ -20,6 +19,7 @@ import pl.napierala.cinemacodechallenge.repository.MovieRatingRepository;
 import pl.napierala.cinemacodechallenge.repository.MovieRepository;
 import pl.napierala.cinemacodechallenge.repository.UserRepository;
 import pl.napierala.cinemacodechallenge.util.IntegrationTest;
+import pl.napierala.cinemacodechallenge.util.RequestUtil;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -48,7 +48,7 @@ public class MovieControllerIntegrationTest {
     public void shouldReturnTheFullDetailsAlongWithUserRating() throws Exception {
 
         // Given
-        String movieCode = "F&F1_TEST";
+        String movieCode = "F&F1_TEST_MCIT_1";
         String name = "The Fast and the Furious";
         String imdbCode = "tt0232500";
 
@@ -75,7 +75,7 @@ public class MovieControllerIntegrationTest {
                 .build();
 
         // When
-        MovieDetailsResponse movieDetailsResponse = request("/movie/details", HttpMethod.POST, "user", "user_password", MovieDetailsResponse.class, request);
+        MovieDetailsResponse movieDetailsResponse = RequestUtil.request(restTemplate, "/movie/details", HttpMethod.POST, "user", "user_password", MovieDetailsResponse.class, request);
 
         //Then
         assertNotNull(movieDetailsResponse);
@@ -92,7 +92,7 @@ public class MovieControllerIntegrationTest {
     public void shouldReturnTheFullDetailsWithoutTheUserRating() throws Exception {
 
         // Given
-        String movieCode = "F&F1_TEST_2";
+        String movieCode = "F&F1_TEST_MCIT_2";
         String name = "The Fast and the Furious";
         String imdbCode = "tt0232500";
 
@@ -109,7 +109,7 @@ public class MovieControllerIntegrationTest {
                 .build();
 
         // When
-        MovieDetailsResponse movieDetailsResponse = request("/movie/details", HttpMethod.POST, "user2", "user_password", MovieDetailsResponse.class, request);
+        MovieDetailsResponse movieDetailsResponse = RequestUtil.request(restTemplate, "/movie/details", HttpMethod.POST, "user2", "user_password", MovieDetailsResponse.class, request);
 
         //Then
         assertNotNull(movieDetailsResponse);
@@ -126,7 +126,7 @@ public class MovieControllerIntegrationTest {
     public void shouldAddAMovieRatingIfNoneExistsBeforeHand() throws Exception {
 
         // Given
-        String movieCode = "F&F1_TEST_3";
+        String movieCode = "F&F1_TEST_MCIT_3";
         String name = "The Fast and the Furious";
         String imdbCode = "tt0232500";
 
@@ -148,7 +148,7 @@ public class MovieControllerIntegrationTest {
         UserEntity user3 = userRepository.findByUserName("user3").get();
 
         // When
-        RateAMovieResponse rateAMovieResponse = request("/movie/rate", HttpMethod.POST, "user3", "user_password", RateAMovieResponse.class, request);
+        RateAMovieResponse rateAMovieResponse = RequestUtil.request(restTemplate, "/movie/rate", HttpMethod.POST, "user3", "user_password", RateAMovieResponse.class, request);
 
         //Then
         assertNotNull(rateAMovieResponse);
@@ -160,17 +160,5 @@ public class MovieControllerIntegrationTest {
         assertEquals(movieEntity, movieRatingEntity.get().getMovie());
         assertEquals(movieRating, movieRatingEntity.get().getRating());
         assertEquals(user3, movieRatingEntity.get().getUser());
-    }
-
-    private <T> T request(String url, HttpMethod httpMethod, String user, String password, Class<T> responseClazz, Object request) throws Exception {
-
-        // Given
-        TestRestTemplate finalRestTemplate = this.restTemplate;
-
-        if (user != null && password != null) {
-            finalRestTemplate = finalRestTemplate.withBasicAuth(user, password);
-        }
-
-        return finalRestTemplate.exchange(url, httpMethod, new HttpEntity<>(request), responseClazz).getBody();
     }
 }

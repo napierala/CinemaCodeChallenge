@@ -53,13 +53,19 @@ public class SecurityIntegrationTest {
     @Test
     public void shouldTestCorrectlyForTheCinemaController() throws Exception {
 
-        UpdateTicketPricesRequest request = UpdateTicketPricesRequest.builder()
+        UpdateTicketPricesRequest updateTicketPricesRequest = UpdateTicketPricesRequest.builder()
                 .cinemaCode("INVALID_CINEMA")
                 .build();
 
-        shouldNotPassSecurity("/cinema/updateTicketPrices", HttpMethod.POST, null, null, UpdateTicketPricesResponse.class, request);
-        shouldNotPassSecurity("/cinema/updateTicketPrices", HttpMethod.POST, "user", "user_password", UpdateTicketPricesResponse.class, request);
-        shouldPassSecurity("/cinema/updateTicketPrices", HttpMethod.POST, "admin", "admin_password", UpdateTicketPricesResponse.class, request);
+        shouldNotPassSecurity("/cinema/updateTicketPrices", HttpMethod.POST, null, null, UpdateTicketPricesResponse.class, updateTicketPricesRequest);
+        shouldNotPassSecurity("/cinema/updateTicketPrices", HttpMethod.POST, "user", "user_password", UpdateTicketPricesResponse.class, updateTicketPricesRequest);
+        shouldPassSecurity("/cinema/updateTicketPrices", HttpMethod.POST, "admin", "admin_password", UpdateTicketPricesResponse.class, updateTicketPricesRequest);
+
+        CinemaDetailsRequest cinemaDetailsRequest = CinemaDetailsRequest.builder()
+                .cinemaCode("INVALID_CINEMA")
+                .build();
+
+        shouldPassSecurity("/cinema/details", HttpMethod.POST, null, null, CinemaDetailsResponse.class, cinemaDetailsRequest);
     }
 
     @Test

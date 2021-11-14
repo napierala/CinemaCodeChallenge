@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 @Data
@@ -16,17 +17,12 @@ import java.io.Serializable;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Schema(description = "A cinema.")
-public class CinemaResponse implements Serializable {
+@Schema(description = "The request for the movie details.")
+public class CinemaDetailsRequest implements Serializable {
 
-    private static final long serialVersionUID = 7136542451252764969L;
+    private static final long serialVersionUID = 54713531968333141L;
 
-    @Schema(description = "The cinema code.")
-    private String code;
-
-    @Schema(description = "The cinema name.")
-    private String name;
-
-    @Schema(description = "The cinema address.")
-    private String address;
+    @NotEmpty
+    @Schema(description = "The cinema code to get the details for.")
+    private String cinemaCode;
 }

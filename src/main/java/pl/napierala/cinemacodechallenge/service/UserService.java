@@ -1,6 +1,7 @@
 package pl.napierala.cinemacodechallenge.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.napierala.cinemacodechallenge.builder.UserEntityBuilder;
@@ -24,13 +25,17 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     public Optional<UserEntity> findByUserName(String userName) {
         return userRepository.findByUserName(userName);
+    }
+
+    public UserEntity findByUserNameOrThrowException(String userName) {
+        return userRepository.findByUserName(userName).orElseThrow(() -> new UsernameNotFoundException(""));
     }
 
     public UserRegisterResponse register(UserRegisterRequest request) {

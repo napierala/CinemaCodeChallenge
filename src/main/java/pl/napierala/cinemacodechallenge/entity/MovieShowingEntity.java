@@ -35,7 +35,7 @@ public class MovieShowingEntity {
     private MovieEntity movie;
 
     @NotEmpty
-    @Column(name = "uuid", nullable = false)
+    @Column(name = "uuid", nullable = false, unique = true)
     private String uuid;
 
     @NotNull

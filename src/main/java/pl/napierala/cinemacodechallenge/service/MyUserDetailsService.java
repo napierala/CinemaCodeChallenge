@@ -21,12 +21,13 @@ public class MyUserDetailsService implements UserDetailsService {
     private UserService userService;
 
     @Autowired
-    private MyUserDetailsService(UserService userService) {
+    public MyUserDetailsService(UserService userService) {
         this.userService = userService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+
         Optional<UserEntity> user = userService.findByUserName(userName);
 
         if (!user.isPresent()) {

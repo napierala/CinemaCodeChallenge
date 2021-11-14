@@ -27,7 +27,7 @@ mvn clean package
 
 ## Launch:
 
-java -jar target/cinemacodechallenge.jar -DimdbKey=OMDb_KEY
+java -jar target/cinemacodechallenge.jar --imdbKey=OMDb_KEY
 
 ## REST documentation:
 
@@ -38,4 +38,5 @@ http://localhost:8088/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-confi
 - Admin: user: admin pass: admin_password
 - Regular: user: user pass: user_password
 - Cinema: code: FIRST
+- Movies: Fast and Furious 1-8
 - Showings: 2021-12-01 and 2021-12-02 of The Fast and the Furious

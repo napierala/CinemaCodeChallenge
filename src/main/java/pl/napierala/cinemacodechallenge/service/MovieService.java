@@ -1,7 +1,6 @@
 package pl.napierala.cinemacodechallenge.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pl.napierala.cinemacodechallenge.builder.MovieDetailsResponseBuilder;
 import pl.napierala.cinemacodechallenge.builder.MovieRatingEntityBuilder;
@@ -29,7 +28,7 @@ public class MovieService {
     private UserService userService;
 
     @Autowired
-    private MovieService(MovieRepository movieRepository, MovieRatingRepository movieRatingRepository,
+    public MovieService(MovieRepository movieRepository, MovieRatingRepository movieRatingRepository,
                          OMDBService omdbService, UserService userService) {
         this.movieRepository = movieRepository;
         this.movieRatingRepository = movieRatingRepository;
@@ -41,27 +40,19 @@ public class MovieService {
         return movieRepository.findByCode(code);
     }
 
+    public MovieEntity findByCodeOrThrowException(String code) {
+        return movieRepository.findByCode(code).orElseThrow(MovieNotFoundException::new);
+    }
+
     public Optional<MovieRatingEntity> findByMovieAndUser(MovieEntity movie, UserEntity user) {
         return movieRatingRepository.findByMovieAndUser(movie, user);
     }
 
     public MovieDetailsResponse details(MovieDetailsRequest request, String userName) {
 
-        Optional<MovieEntity> movieEntityOptional = findByCode(request.getMovieCode());
+        MovieEntity movieEntity = findByCodeOrThrowException(request.getMovieCode());
 
-        if (!movieEntityOptional.isPresent()) {
-            throw new MovieNotFoundException();
-        }
-
-        MovieEntity movieEntity = movieEntityOptional.get();
-
-        Optional<UserEntity> userEntityOptional = userService.findByUserName(userName);
-
-        if (!userEntityOptional.isPresent()) {
-            throw new UsernameNotFoundException("");
-        }
-
-        UserEntity userEntity = userEntityOptional.get();
+        UserEntity userEntity = userService.findByUserNameOrThrowException(userName);
 
         Optional<MovieRatingEntity> movieRating = movieRatingRepository.findByMovieAndUser(movieEntity, userEntity);
 
@@ -72,21 +63,9 @@ public class MovieService {
 
     public RateAMovieResponse rate(RateAMovieRequest request, String userName) {
 
-        Optional<MovieEntity> movieEntityOptional = findByCode(request.getMovieCode());
+        MovieEntity movieEntity = findByCodeOrThrowException(request.getMovieCode());
 
-        if (!movieEntityOptional.isPresent()) {
-            throw new MovieNotFoundException();
-        }
-
-        MovieEntity movieEntity = movieEntityOptional.get();
-
-        Optional<UserEntity> userEntityOptional = userService.findByUserName(userName);
-
-        if (!userEntityOptional.isPresent()) {
-            throw new UsernameNotFoundException("");
-        }
-
-        UserEntity userEntity = userEntityOptional.get();
+        UserEntity userEntity = userService.findByUserNameOrThrowException(userName);
 
         if (movieRatingRepository.findByMovieAndUser(movieEntity, userEntity).isPresent()) {
             return RateAMovieResponseBuilder.buildWith(false);

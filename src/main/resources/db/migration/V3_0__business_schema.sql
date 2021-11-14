@@ -36,7 +36,8 @@ CREATE TABLE movie_showing (
   room VARCHAR(255) NOT NULL,
   CONSTRAINT movie_showing_primary_key PRIMARY KEY (id),
   CONSTRAINT movie_showing_cinema_id_fkey FOREIGN KEY (cinema_id) references cinema (id),
-  CONSTRAINT movie_showing_movie_id_fkey FOREIGN KEY (movie_id) references movie (id)
+  CONSTRAINT movie_showing_movie_id_fkey FOREIGN KEY (movie_id) references movie (id),
+  CONSTRAINT movie_showing_uuid_unique_key UNIQUE KEY (uuid)
 );
 
 CREATE TABLE ticket_price (

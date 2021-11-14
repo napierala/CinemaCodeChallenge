@@ -90,7 +90,7 @@ public class TicketPriceEntityBuilderTest {
     }
 
     @Test
-    public void shouldBuildCorrectlyForTwoElement() {
+    public void shouldBuildCorrectlyForTwoElements() {
 
         // Given
         String code = "CODE";
