@@ -10,24 +10,32 @@
 - Security: Usually oauth tokens with https are used as authentication but for the sake of this challenge a simple basic authentication was used which of course needs https. Many times https is done via other mechanism like haproxy to keep things simple and avoid the self-signed certificate problems https was omitted.
 - Currency: Only one currency is assumed in this app.
 - Cinema: Even though the requirements only state a single cinema, supporting from the beginning many cinemas will mean a lot less changes when the client opens more cinemas.
+- Tests: unit tests were made only for the truly non-spring code - builders, to test the full functionalities' integration tests that start the app were made. Tests with mocks(@WebMvcTest, @DataJpaTest, etc.) should also be made but in this challenge they were omitted.
 
 ## Prerequisites:
 - maven installed.
 - Java8 jdk installed.
 - 8088 port not used.
 
+## Run integration tests:
+
+mvn clean test -P IT -DimdbKey=OMDb_KEY
+
 ## Build:
 
 mvn clean package
 
-## Run integration tests:
-
-mvn clean test -P IT
-
 ## Launch:
 
-java -jar target/cinemacodechallenge.jar
+java -jar target/cinemacodechallenge.jar -DimdbKey=OMDb_KEY
 
 ## REST documentation:
 
 http://localhost:8088/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config
+
+## PreLoaded data:
+
+- Admin: user: admin pass: admin_password
+- Regular: user: user pass: user_password
+- Cinema: code: FIRST
+- Showings: 2021-12-01 and 2021-12-02 of The Fast and the Furious

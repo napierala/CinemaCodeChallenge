@@ -3,6 +3,8 @@ package pl.napierala.cinemacodechallenge.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,5 +22,10 @@ public class AdditionalBeans {
         loggingFilter.setIncludePayload(true);
         loggingFilter.setMaxPayloadLength(maxRequestSize);
         return loggingFilter;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

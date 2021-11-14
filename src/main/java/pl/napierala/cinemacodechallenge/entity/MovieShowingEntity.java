@@ -53,7 +53,6 @@ public class MovieShowingEntity {
 
         MovieShowingEntity that = (MovieShowingEntity) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (cinema != null ? !cinema.equals(that.cinema) : that.cinema != null) return false;
         if (movie != null ? !movie.equals(that.movie) : that.movie != null) return false;
         if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
@@ -63,8 +62,7 @@ public class MovieShowingEntity {
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (cinema != null ? cinema.hashCode() : 0);
+        int result = cinema != null ? cinema.hashCode() : 0;
         result = 31 * result + (movie != null ? movie.hashCode() : 0);
         result = 31 * result + (uuid != null ? uuid.hashCode() : 0);
         result = 31 * result + (dateTime != null ? dateTime.hashCode() : 0);

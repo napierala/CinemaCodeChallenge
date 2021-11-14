@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "movie_rating")
+@Table(name = "movie_rating", uniqueConstraints = @UniqueConstraint(name = "movie_rating_movie_id_user_id_unique", columnNames = {"movie_id", "user_id"}))
 public class MovieRatingEntity {
 
     @Id
@@ -44,18 +44,14 @@ public class MovieRatingEntity {
 
         MovieRatingEntity that = (MovieRatingEntity) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (movie != null ? !movie.equals(that.movie) : that.movie != null) return false;
-        if (user != null ? !user.equals(that.user) : that.user != null) return false;
-        return rating != null ? rating.equals(that.rating) : that.rating == null;
+        return user != null ? user.equals(that.user) : that.user == null;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (movie != null ? movie.hashCode() : 0);
+        int result = movie != null ? movie.hashCode() : 0;
         result = 31 * result + (user != null ? user.hashCode() : 0);
-        result = 31 * result + (rating != null ? rating.hashCode() : 0);
         return result;
     }
 

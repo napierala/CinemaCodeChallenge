@@ -49,7 +49,6 @@ public class TicketPriceEntity {
 
         TicketPriceEntity that = (TicketPriceEntity) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (cinema != null ? !cinema.equals(that.cinema) : that.cinema != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         return priceInCents != null ? priceInCents.equals(that.priceInCents) : that.priceInCents == null;
@@ -57,8 +56,7 @@ public class TicketPriceEntity {
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (cinema != null ? cinema.hashCode() : 0);
+        int result = cinema != null ? cinema.hashCode() : 0;
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (priceInCents != null ? priceInCents.hashCode() : 0);
         return result;

@@ -13,7 +13,7 @@ CREATE TABLE movie (
   name VARCHAR(255) NOT NULL,
   imdb_id VARCHAR(255) NOT NULL,
   CONSTRAINT movie_primary_key PRIMARY KEY (id),
-  CONSTRAINT movie_unique_key UNIQUE KEY (code)
+  CONSTRAINT movie_code_unique_key UNIQUE KEY (code)
 );
 
 CREATE TABLE movie_rating (
@@ -23,7 +23,8 @@ CREATE TABLE movie_rating (
   rating INT NOT NULL,
   CONSTRAINT movie_rating_primary_key PRIMARY KEY (id),
   CONSTRAINT movie_rating_movie_id_fkey FOREIGN KEY (movie_id) references movie (id),
-  CONSTRAINT movie_rating_user_id_fkey FOREIGN KEY (user_id) references users (id)
+  CONSTRAINT movie_rating_user_id_fkey FOREIGN KEY (user_id) references users (id),
+  CONSTRAINT movie_rating_movie_id_user_id_unique_key UNIQUE KEY (movie_id, user_id)
 );
 
 CREATE TABLE movie_showing (

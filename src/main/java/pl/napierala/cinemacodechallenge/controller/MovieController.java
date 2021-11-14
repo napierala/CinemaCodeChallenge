@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import pl.napierala.cinemacodechallenge.extmodel.MovieDetailsRequest;
 import pl.napierala.cinemacodechallenge.extmodel.MovieDetailsResponse;
 import pl.napierala.cinemacodechallenge.extmodel.RateAMovieRequest;
 import pl.napierala.cinemacodechallenge.extmodel.RateAMovieResponse;
+import pl.napierala.cinemacodechallenge.service.MovieService;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -20,6 +22,13 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/movie")
 public class MovieController {
+
+    private MovieService movieService;
+
+    @Autowired
+    public MovieController(MovieService movieService) {
+        this.movieService = movieService;
+    }
 
     @Operation(
             summary = "Get details about a movie.",
@@ -35,11 +44,11 @@ public class MovieController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "/details", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public MovieDetailsResponse details(@RequestBody @Valid final MovieDetailsRequest request, Principal principal) {
-        return null; // TODO
+        return movieService.details(request, principal.getName());
     }
 
     @Operation(
-            summary = "Rate a movie",
+            summary = "Rate a movie.",
             description = "Rate a movie, a movie can only be rated once. Available only for regular users.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Result",
@@ -52,6 +61,6 @@ public class MovieController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "/rate", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public RateAMovieResponse rate(@RequestBody @Valid final RateAMovieRequest request, Principal principal) {
-        return null; // TODO
+        return movieService.rate(request, principal.getName());
     }
 }
