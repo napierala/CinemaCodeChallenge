@@ -10,7 +10,8 @@
 - Security: Usually oauth tokens with https are used as authentication but for the sake of this challenge a simple basic authentication was used which of course needs https. Many times https is done via other mechanism like haproxy to keep things simple and avoid the self-signed certificate problems https was omitted.
 - Currency: Only one currency is assumed in this app.
 - Cinema: Even though the requirements only state a single cinema, supporting from the beginning many cinemas will mean a lot less changes when the client opens more cinemas.
-- Tests: unit tests were made only for the truly non-spring code - builders, to test the full functionalities' integration tests that start the app were made. Tests with mocks(@WebMvcTest, @DataJpaTest, etc.) should also be made but in this challenge they were omitted.
+- Tests: Unit tests were made only for the truly non-spring code - builders, to test the full functionalities' integration tests that start the app were made. Tests with mocks(@WebMvcTest, @DataJpaTest, etc.) should also be made but in this challenge they were omitted.
+- Endpoints: Basic endpoints have been added, for a real production application a couple more would have been needed: movie list/adding/update, cinema list/adding/update etc.
 
 ## Prerequisites:
 - maven installed.
@@ -38,5 +39,5 @@ http://localhost:8088/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-confi
 - Admin: user: admin pass: admin_password
 - Regular: user: user pass: user_password
 - Cinema: code: FIRST
-- Movies: Fast and Furious 1-8
+- Movies: codes: F&F1, F&F2, F&F3, F&F4, F&F5, F&F6, F&F7, F&F8
 - Showings: 2021-12-01 and 2021-12-02 of The Fast and the Furious
